@@ -1,32 +1,39 @@
 pipeline {
-    agent any
+	agent any
+	
+	stages {
 
-    stages {
-        stage ('Compile Stage') {
-
-            steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn clean compile'
-                }
-            }
-        }
-
-        stage ('Testing Stage') {
-
-            steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn test'
-                }
-            }
-        }
-
-
-        stage ('Deployment Stage') {
-            steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn deploy'
-                }
-            }
-        }
-    }
+		stage ('Clone Repo') {
+			steps {
+				git url: 'https://github.com/rinkucool007/maven-project.git'			
+			}
+		}	
+	
+	
+		stage ('Compile Stage') {
+			steps {
+				withMaven(maven : 'maven_3_5_0') {
+					bat 'mvn clean compile'
+				}
+			
+			}
+		}
+		stage ('Testing Stage') {
+			steps {
+				withMaven(maven : 'maven_3_5_0') {
+					bat 'mvn test'
+				}
+			
+			}
+		}	
+		stage ('Deployment Stage') {
+			steps {
+				withMaven(maven : 'maven_3_5_0') {
+					bat 'mvn tomcat7:redeploy'
+				}
+			
+			}
+		}	
+	
+	}
 }
